@@ -9,7 +9,7 @@ const hits = new Map<string, number[]>();
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NAME_MAX = 100;
 const MESSAGE_MAX = 3000;
-const ALLOWED_ORIGIN = 'https://lorenzogaviani.dev';
+const ALLOWED_ORIGIN = 'https://lorenzogaviani.it';
 
 function limited(ip: string) {
   const now = Date.now();
@@ -55,7 +55,7 @@ export default async function handler(req: Request): Promise<Response> {
       'content-type': 'application/json'
     },
     body: JSON.stringify({
-      from: 'portfolio@lorenzogaviani.dev',
+      from: 'portfolio@lorenzogaviani.it',
       to: process.env.CONTACT_TO,
       reply_to: email,
       subject: 'Portfolio — ' + trimmedName,

@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 // GitHub Pages: set site to https://<user>.github.io and base to '/<repo>/'.
 // Vercel/Netlify: leave base as '/'.
 export default defineConfig({
-  site: 'https://lorenzogaviani.dev',
+  site: 'https://lorenzogaviani.it',
   base: '/',
   integrations: [react(), sitemap()],
   i18n: {
