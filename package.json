@@ -12,6 +12,7 @@
   "dependencies": {
     "@astrojs/react": "^4.2.0",
     "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/vercel": "^11.0.10",
     "astro": "^7.3.2",
     "cmdk": "^1.1.1",
     "react": "^19.0.0",
@@ -22,5 +23,8 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "typescript": "^5.7.0"
+  },
+  "overrides": {
+    "path-to-regexp": "^6.3.0"
   }
 }
