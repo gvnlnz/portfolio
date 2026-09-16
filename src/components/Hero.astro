@@ -1,0 +1,69 @@
+---
+import { site } from '../data/site';
+import { useTranslations, type Locale } from '../i18n/ui';
+import { idFields, phrases } from '../data/content';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const fields = idFields[locale];
+const words = phrases[locale];
+---
+<section id="top" class="hero">
+  <div>
+    <p class="mono" style="font-size:12px;color:var(--color-accent);margin-bottom:22px">{t('hero.prompt')}</p>
+    <h1>LORENZO<br />GAVIANI</h1>
+    <p class="hero-role">{t('hero.role')}</p>
+    <p class="typeline">
+      <span class="mono" style="font-size:12px;color:var(--color-accent-400)" aria-hidden="true">&gt;</span>
+      <span id="typed" aria-live="off">{words[0]}</span>
+      <span class="caret" aria-hidden="true"></span>
+    </p>
+    <p class="hero-lede">{t('hero.lede')}</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#projects">{t('hero.cta1')}</a>
+      <a class="btn btn-secondary" href="#contact">{t('hero.cta2')}</a>
+      <a class="btn btn-ghost" href={site.cv} download>{t('hero.cv')}</a>
+    </div>
+  </div>
+
+  <div class="card elev-sm idcard">
+    <div class="idcard-bar">
+      <span class="dim">identity.card</span>
+      <span style="color:var(--color-accent)">{t('id.verified')}</span>
+    </div>
+    <figure>
+      <img src={site.photo} alt={site.name} width="778" height="1000" loading="eager" fetchpriority="high" />
+    </figure>
+    <dl>
+      {fields.map(([k, v]) => (
+        <div><dt>{k}</dt><dd>{v}</dd></div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+<script is:inline define:vars={{ words }}>
+  (() => {
+    const el = document.getElementById('typed');
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let i = 0, n = 0, deleting = false, timer = 0;
+    const step = () => {
+      const full = words[i % words.length];
+      if (!deleting) {
+        n += 1;
+        el.textContent = full.slice(0, n);
+        if (n >= full.length) { deleting = true; timer = setTimeout(step, 1900); return; }
+        timer = setTimeout(step, 46);
+      } else {
+        n -= 1;
+        el.textContent = full.slice(0, Math.max(n, 0));
+        if (n <= 0) { deleting = false; i += 1; timer = setTimeout(step, 260); return; }
+        timer = setTimeout(step, 22);
+      }
+    };
+    const start = () => { el.textContent = ''; n = 0; timer = setTimeout(step, 340); };
+    window.addEventListener('portfolio:boot-done', start, { once: true });
+    setTimeout(() => { if (!n) start(); }, 4000);
+  })();
+</script>

@@ -1,0 +1,28 @@
+---
+import { site } from '../data/site';
+import { statusStrip } from '../data/content';
+import type { Locale } from '../i18n/ui';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const rows = statusStrip[locale];
+---
+<dl class="strip">
+  {rows.map(([k, v], i) => (
+    <div>
+      <dt>{k}</dt>
+      <dd class={i === 0 ? 'live' : undefined} data-clock={i === 3 ? 'true' : undefined}>{v || '--:--:--'}</dd>
+    </div>
+  ))}
+</dl>
+
+<script is:inline define:vars={{ tz: site.timezone }}>
+  (() => {
+    const el = document.querySelector('[data-clock]');
+    if (!el) return;
+    const fmt = new Intl.DateTimeFormat('it-IT', { timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const tick = () => { el.textContent = fmt.format(new Date()); };
+    tick();
+    setInterval(tick, 1000);
+  })();
+</script>

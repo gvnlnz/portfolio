@@ -1,0 +1,24 @@
+---
+import { useTranslations, type Locale } from '../i18n/ui';
+import { aboutParagraphs, principles } from '../data/content';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+<section id="about" class="sec">
+  <p class="kicker">01 — whoami</p>
+  <h2 class="sec-h" style="max-width:22ch;line-height:1.08;margin-bottom:30px">{t('about.head')}</h2>
+  <div class="cols" style="max-width:900px">
+    {aboutParagraphs[locale].map((p) => <p class="prose" style="margin:0">{p}</p>)}
+  </div>
+  <div class="grid-cards" style="margin-top:clamp(32px,5vw,56px)">
+    {principles[locale].map(([n, title, body]) => (
+      <article class="card elev-sm" style="padding:16px">
+        <p class="card-kicker" style="margin:0">{n}</p>
+        <h3 class="card-title">{title}</h3>
+        <p class="card-body" style="line-height:1.62">{body}</p>
+      </article>
+    ))}
+  </div>
+</section>

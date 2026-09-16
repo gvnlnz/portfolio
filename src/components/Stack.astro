@@ -1,0 +1,31 @@
+---
+import { useTranslations, type Locale } from '../i18n/ui';
+import { stackRoles, yamlLines } from '../data/content';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+<section id="stack" class="sec">
+  <p class="kicker">03 — cat stack.yaml</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(22px,4vw,48px);align-items:start">
+    <div>
+      <h2 class="sec-h">{t('stack.head')}</h2>
+      <p class="prose" style="max-width:40ch;margin-bottom:22px">{t('stack.sub')}</p>
+      <dl class="roles">
+        {stackRoles[locale].map(([k, title, body]) => (
+          <div>
+            <dt>{k}</dt>
+            <dd><strong>{title}</strong><span>{body}</span></dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+    <div class="yaml">
+      <p class="yaml-bar">stack.yaml</p>
+      <pre><code>{yamlLines.map((l, i) => (
+        <span class="ln"><span class="n">{i + 1}</span><span class={l.key ? 'k' : 'v'}>{l.text}</span></span>
+      ))}</code></pre>
+    </div>
+  </div>
+</section>

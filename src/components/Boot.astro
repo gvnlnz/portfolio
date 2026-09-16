@@ -1,0 +1,65 @@
+---
+import type { Locale } from '../i18n/ui';
+import { useTranslations } from '../i18n/ui';
+import { bootLines } from '../data/content';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const lines = bootLines[locale];
+---
+<div id="boot" aria-hidden="true" hidden>
+  <div>
+    <p class="cmd">{t('boot.cmd')}</p>
+    <div class="lines"></div>
+    <div class="bar"><i></i></div>
+    <p class="skip">{t('boot.skip')}</p>
+  </div>
+</div>
+
+<script is:inline define:vars={{ lines }}>
+  (() => {
+    const el = document.getElementById('boot');
+    if (!el) return;
+    const KEY = 'portfolio:booted';
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let seen = false;
+    try { seen = sessionStorage.getItem(KEY) === '1'; } catch {}
+    if (seen || reduce) {
+      window.dispatchEvent(new Event('portfolio:boot-done'));
+      return;
+    }
+
+    el.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+    const out = el.querySelector('.lines');
+    const bar = el.querySelector('.bar i');
+    let i = 0;
+    let timer = 0;
+
+    const finish = () => {
+      clearInterval(timer);
+      try { sessionStorage.setItem(KEY, '1'); } catch {}
+      el.style.opacity = '0';
+      document.documentElement.style.overflow = '';
+      setTimeout(() => {
+        el.hidden = true;
+        window.dispatchEvent(new Event('portfolio:boot-done'));
+      }, 440);
+      window.removeEventListener('keydown', finish);
+      el.removeEventListener('click', finish);
+    };
+
+    timer = setInterval(() => {
+      if (i >= lines.length) { setTimeout(finish, 480); clearInterval(timer); return; }
+      const row = document.createElement('div');
+      row.textContent = lines[i];
+      out.appendChild(row);
+      i += 1;
+      bar.style.width = Math.round((i / lines.length) * 100) + '%';
+    }, 300);
+
+    window.addEventListener('keydown', finish, { once: true });
+    el.addEventListener('click', finish, { once: true });
+  })();
+</script>

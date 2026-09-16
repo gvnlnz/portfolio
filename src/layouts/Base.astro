@@ -1,0 +1,86 @@
+---
+import '../styles/global.css';
+import '../styles/page.css';
+import ThemeScript from '../components/ThemeScript.astro';
+import Boot from '../components/Boot.astro';
+import Palette from '../components/Palette';
+import { site } from '../data/site';
+import { locales, otherLocale, useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  paletteFiles: { key: string; file: string; tech: string }[];
+}
+
+const { locale, paletteFiles } = Astro.props;
+const t = useTranslations(locale);
+const canonical = new URL(`/${locale}/`, Astro.site);
+const other = otherLocale(locale);
+
+const paletteStrings = {
+  placeholder: t('palette.placeholder'),
+  empty: t('palette.empty'),
+  section: t('palette.section'),
+  file: t('palette.file'),
+  action: t('palette.action'),
+  jump: t('palette.jump'),
+  open: t('palette.open'),
+  lang: t('palette.lang'),
+  theme: t('palette.theme'),
+  copy: t('palette.copy'),
+  cv: t('palette.cv'),
+  sections: {
+    about: t('nav.about'),
+    projects: t('nav.projects'),
+    stack: t('nav.stack'),
+    path: t('nav.path'),
+    contact: t('nav.contact')
+  }
+};
+---
+<!doctype html>
+<html lang={locale} data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{t('meta.title')}</title>
+    <meta name="description" content={t('meta.description')} />
+    <link rel="canonical" href={canonical} />
+    {locales.map((l) => <link rel="alternate" hreflang={l} href={new URL(`/${l}/`, Astro.site)} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL('/it/', Astro.site)} />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={t('meta.title')} />
+    <meta property="og:description" content={t('meta.description')} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={locale === 'it' ? 'it_IT' : 'en_GB'} />
+    <meta property="og:image" content={new URL(site.photo, Astro.site)} />
+    <meta name="twitter:card" content="summary" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <ThemeScript />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: site.name,
+      email: 'mailto:' + site.email,
+      url: canonical.href,
+      sameAs: [site.github, site.linkedin],
+      address: { '@type': 'PostalAddress', addressLocality: site.city, addressCountry: 'IT' },
+      alumniOf: { '@type': 'CollegeOrUniversity', name: 'Università degli Studi di Ferrara' }
+    })} />
+  </head>
+  <body>
+    <Boot locale={locale} />
+    <Palette
+      client:idle
+      locale={locale}
+      other={other}
+      files={paletteFiles}
+      strings={paletteStrings}
+      email={site.email}
+      cv={site.cv}
+    />
+    <slot />
+  </body>
+</html>

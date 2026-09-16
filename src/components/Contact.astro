@@ -1,0 +1,88 @@
+---
+import { site } from '../data/site';
+import { useTranslations, type Locale } from '../i18n/ui';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const links = [
+  ['email', site.email, `mailto:${site.email}`],
+  ['github', site.githubLabel, site.github],
+  ['linkedin', site.linkedinLabel, site.linkedin],
+  ['cv', site.cvLabel, site.cv]
+] as const;
+---
+<section id="contact" class="sec">
+  <p class="kicker">05 — ping lorenzo</p>
+  <div class="contact">
+    <div>
+      <h2>{t('contact.head')}</h2>
+      <p class="prose" style="max-width:40ch;margin-bottom:26px">{t('contact.sub')}</p>
+      <ul class="linklist">
+        {links.map(([k, label, href]) => (
+          <li>
+            <a class="linkrow" href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noreferrer' : undefined}>
+              <b>{k}</b><span>{label}</span><em aria-hidden="true">↗</em>
+            </a>
+          </li>
+        ))}
+        <li>
+          <button class="btn btn-secondary" type="button" id="copy-email" style="justify-content:space-between;width:100%;padding:11px 13px;font-family:var(--font-mono);font-size:11.5px">
+            <span data-label>{t('contact.copyIdle')}</span>
+            <span style="color:var(--color-accent)" data-glyph>⧉</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <form class="card elev-sm" id="contact-form" method="post" action="/api/contact">
+      <p class="mono dim-2" style="font-size:10.5px;letter-spacing:0.08em">{t('form.label')}</p>
+      <div class="field"><label for="c-name">{t('form.name')}</label><input class="input" id="c-name" name="name" required autocomplete="name" /></div>
+      <div class="field"><label for="c-email">{t('form.email')}</label><input class="input" id="c-email" name="email" type="email" required autocomplete="email" /></div>
+      <div class="field"><label for="c-msg">{t('form.message')}</label><textarea class="input" id="c-msg" name="message" required minlength="10" maxlength="3000"></textarea></div>
+      <div class="hp" aria-hidden="true"><label for="c-url">Website</label><input id="c-url" name="website" tabindex="-1" autocomplete="off" /></div>
+      <button class="btn btn-primary btn-block" type="submit" style="padding:9px 14px">{t('form.send')}</button>
+      <p class="mono" id="form-status" role="status" style="font-size:11.5px;color:var(--color-accent);min-height:1.2em"></p>
+    </form>
+  </div>
+</section>
+
+<script is:inline define:vars={{ email: site.email, copyIdle: t('contact.copyIdle'), copyDone: t('contact.copyDone'), sending: t('form.sending'), ok: t('form.ok'), err: t('form.err') }}>
+  (() => {
+    const btn = document.getElementById('copy-email');
+    if (btn) {
+      const label = btn.querySelector('[data-label]');
+      const glyph = btn.querySelector('[data-glyph]');
+      const run = async () => {
+        try { await navigator.clipboard.writeText(email); } catch {}
+        label.textContent = copyDone;
+        glyph.textContent = '✓';
+        setTimeout(() => { label.textContent = copyIdle; glyph.textContent = '⧉'; }, 2400);
+      };
+      btn.addEventListener('click', run);
+      window.addEventListener('portfolio:copy-email', run);
+    }
+
+    const form = document.getElementById('contact-form');
+    const status = document.getElementById('form-status');
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (form.website.value) return;
+      status.textContent = sending;
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form)))
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        status.textContent = ok;
+        form.reset();
+      } catch {
+        status.textContent = err;
+      }
+    });
+  })();
+</script>

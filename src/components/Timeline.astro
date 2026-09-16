@@ -1,0 +1,33 @@
+---
+import { useTranslations, type Locale } from '../i18n/ui';
+import { timeline } from '../data/content';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+<section id="path" class="sec">
+  <p class="kicker">04 — git log --path</p>
+  <h2 class="sec-h" style="margin-bottom:34px">{t('path.head')}</h2>
+  <ol class="tl">
+    {timeline[locale].map((e) => (
+      <li>
+        <div class="tl-tag">{e.tag}</div>
+        <div class="tl-rail" aria-hidden="true"><i></i><span></span></div>
+        <div class="tl-body">
+          <div class="tl-head">
+            <h3>{e.org}</h3>
+            <span class="mono dim-2" style="font-size:10.5px">{e.period}</span>
+          </div>
+          <p class="tl-role">{e.role}</p>
+          {e.body && <p class="prose" style="font-size:13.5px;margin:0 0 9px;max-width:56ch">{e.body}</p>}
+          {e.tags.length > 0 && (
+            <ul class="tagrow" style="margin:0">
+              {e.tags.map((tag) => <li class="tag tag-outline">{tag}</li>)}
+            </ul>
+          )}
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>

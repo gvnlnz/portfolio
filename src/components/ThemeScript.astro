@@ -1,0 +1,28 @@
+---
+// Runs before paint: no flash of the wrong theme, and exposes the toggle
+// to both the nav button and the command palette.
+---
+<script is:inline>
+  (() => {
+    const KEY = 'portfolio:theme';
+    const read = () => {
+      try { return localStorage.getItem(KEY); } catch { return null; }
+    };
+    const system = () => (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    const apply = (t) => {
+      document.documentElement.dataset.theme = t;
+      document.documentElement.style.colorScheme = t;
+    };
+    const set = (t) => {
+      apply(t);
+      try { localStorage.setItem(KEY, t); } catch {}
+      window.dispatchEvent(new CustomEvent('portfolio:theme', { detail: t }));
+    };
+    apply(read() || system());
+    window.__theme = {
+      get: () => document.documentElement.dataset.theme || 'dark',
+      set,
+      toggle: () => set(window.__theme.get() === 'dark' ? 'light' : 'dark')
+    };
+  })();
+</script>

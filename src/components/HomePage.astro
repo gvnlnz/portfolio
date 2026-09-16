@@ -1,0 +1,67 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Nav from './Nav.astro';
+import Hero from './Hero.astro';
+import StatusStrip from './StatusStrip.astro';
+import About from './About.astro';
+import Stack from './Stack.astro';
+import Timeline from './Timeline.astro';
+import Contact from './Contact.astro';
+import Footer from './Footer.astro';
+import ProjectExplorer from './ProjectExplorer';
+import { useTranslations, type Locale } from '../i18n/ui';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const entries = (await getCollection('projects', (e) => e.data.locale === locale)).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const projects = entries.map((e) => ({
+  key: e.data.key,
+  file: e.data.file,
+  folder: e.data.folder,
+  tech: e.data.tech,
+  year: e.data.year,
+  stars: e.data.stars,
+  repo: e.data.repo,
+  title: e.data.title,
+  body: (e.body ?? '').trim(),
+  tags: e.data.tags
+}));
+
+const explorerStrings = {
+  explorer: t('projects.explorer'),
+  foot1: t('projects.foot1'),
+  foot2: t('projects.foot2'),
+  repo: t('projects.repo'),
+  next: t('projects.next'),
+  viewGrid: t('projects.viewGrid'),
+  viewTree: t('projects.viewTree')
+};
+
+const paletteFiles = projects.map((p) => ({ key: p.key, file: p.file, tech: p.tech }));
+---
+<Base locale={locale} paletteFiles={paletteFiles}>
+  <Nav locale={locale} />
+  <main class="wrap">
+    <Hero locale={locale} />
+    <StatusStrip locale={locale} />
+    <About locale={locale} />
+
+    <section id="projects" class="sec">
+      <p class="kicker">02 — ls projects/</p>
+      <h2 class="sec-h">{t('projects.head')}</h2>
+      <p class="dim" style="font-size:14px;margin:0 0 20px;max-width:52ch">{t('projects.sub')}</p>
+      <ProjectExplorer client:visible projects={projects} strings={explorerStrings} />
+    </section>
+
+    <Stack locale={locale} />
+    <Timeline locale={locale} />
+    <Contact locale={locale} />
+  </main>
+  <Footer locale={locale} />
+</Base>

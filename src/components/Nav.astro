@@ -1,0 +1,47 @@
+---
+import { site, sectionIds } from '../data/site';
+import { otherLocale, useTranslations, type Locale } from '../i18n/ui';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const other = otherLocale(locale);
+const labels = { about: t('nav.about'), projects: t('nav.projects'), stack: t('nav.stack'), path: t('nav.path'), contact: t('nav.contact') } as const;
+---
+<header class="hdr">
+  <div class="nav">
+    <a href={`/${locale}/#top`} class="nav-brand" style="display:flex;align-items:center;gap:9px;text-decoration:none">
+      <span class="mark" aria-hidden="true">{site.initials}</span>
+      <span style="font-size:15px">{site.name}</span>
+    </a>
+    <nav aria-label="Sections">
+      {sectionIds.map((id) => <a href={`#${id}`}>{labels[id]}</a>)}
+    </nav>
+    <div class="hdr-tools">
+      <a class="btn btn-secondary" href={`/${other}/`} hreflang={other} rel="alternate">{t('nav.otherLang')}</a>
+      <button class="btn btn-secondary btn-icon" id="theme-btn" type="button" aria-label={t('nav.themeToLight')} style="width:30px;height:30px">
+        <span aria-hidden="true" data-glyph>☀</span>
+      </button>
+      <button class="btn btn-secondary" type="button" data-palette-open>⌘K</button>
+    </div>
+  </div>
+</header>
+
+<script is:inline define:vars={{ toLight: t('nav.themeToLight'), toDark: t('nav.themeToDark') }}>
+  (() => {
+    const btn = document.getElementById('theme-btn');
+    if (!btn) return;
+    const glyph = btn.querySelector('[data-glyph]');
+    const sync = () => {
+      const dark = (window.__theme?.get() ?? 'dark') === 'dark';
+      glyph.textContent = dark ? '☀' : '☾';
+      btn.setAttribute('aria-label', dark ? toLight : toDark);
+    };
+    btn.addEventListener('click', () => window.__theme?.toggle());
+    window.addEventListener('portfolio:theme', sync);
+    sync();
+    document.querySelectorAll('[data-palette-open]').forEach((el) =>
+      el.addEventListener('click', () => window.dispatchEvent(new Event('portfolio:palette')))
+    );
+  })();
+</script>
