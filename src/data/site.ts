@@ -5,7 +5,7 @@ export const site = {
   github: 'https://github.com/gvnlnz',
   githubLabel: 'github.com/gvnlnz',
   // TODO: replace with the real profile URL.
-  linkedin: 'https://www.linkedin.com/in/lorenzo-gaviani',
+  linkedin: 'https://www.linkedin.com/in/lorenzo-gaviani-88839a286/',
   linkedinLabel: 'in/lorenzo-gaviani',
   cv: '/assets/CV_Gaviani_Lorenzo.pdf',
   cvLabel: 'CV_Gaviani_Lorenzo.pdf',
