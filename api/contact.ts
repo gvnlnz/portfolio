@@ -9,7 +9,7 @@ const hits = new Map<string, number[]>();
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NAME_MAX = 100;
 const MESSAGE_MAX = 3000;
-const ALLOWED_ORIGIN = 'https://lorenzogaviani.it';
+const ALLOWED_ORIGINS = new Set(['https://lorenzogaviani.it', 'https://www.lorenzogaviani.it']);
 
 function limited(ip: string) {
   const now = Date.now();
@@ -23,7 +23,8 @@ export const config = { runtime: 'edge' };
 
 export default async function handler(req: Request): Promise<Response> {
   if (req.method !== 'POST') return new Response('Method not allowed', { status: 405 });
-  if (req.headers.get('origin') !== ALLOWED_ORIGIN) return new Response('Forbidden', { status: 403 });
+  const origin = req.headers.get('origin');
+  if (!origin || !ALLOWED_ORIGINS.has(origin)) return new Response('Forbidden', { status: 403 });
 
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
   if (limited(ip)) return new Response('Too many requests', { status: 429 });
