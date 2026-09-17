@@ -12,9 +12,9 @@ const labels = { about: t('nav.about'), projects: t('nav.projects'), stack: t('n
   <div class="nav">
     <a href={`/${locale}/#top`} class="nav-brand" style="display:flex;align-items:center;gap:9px;text-decoration:none">
       <span class="mark" aria-hidden="true">{site.initials}</span>
-      <span style="font-size:15px">{site.name}</span>
+      <span class="nav-brand-name" style="font-size:15px">{site.name}</span>
     </a>
-    <nav aria-label="Sections">
+    <nav aria-label="Sections" id="site-nav">
       {sectionIds.map((id) => <a href={`#${id}`}>{labels[id]}</a>)}
     </nav>
     <div class="hdr-tools">
@@ -24,10 +24,20 @@ const labels = { about: t('nav.about'), projects: t('nav.projects'), stack: t('n
       </button>
       <button class="btn btn-secondary" type="button" data-palette-open>⌘K</button>
     </div>
+    <button
+      class="btn btn-secondary btn-icon menu-toggle"
+      id="menu-toggle"
+      type="button"
+      aria-label={t('nav.openMenu')}
+      aria-expanded="false"
+      aria-controls="site-nav"
+    >
+      <span aria-hidden="true" data-menu-glyph>☰</span>
+    </button>
   </div>
 </header>
 
-<script is:inline define:vars={{ toLight: t('nav.themeToLight'), toDark: t('nav.themeToDark') }}>
+<script is:inline define:vars={{ toLight: t('nav.themeToLight'), toDark: t('nav.themeToDark'), openMenu: t('nav.openMenu'), closeMenu: t('nav.closeMenu') }}>
   (() => {
     const btn = document.getElementById('theme-btn');
     if (!btn) return;
@@ -43,5 +53,22 @@ const labels = { about: t('nav.about'), projects: t('nav.projects'), stack: t('n
     document.querySelectorAll('[data-palette-open]').forEach((el) =>
       el.addEventListener('click', () => window.dispatchEvent(new Event('portfolio:palette')))
     );
+
+    const menuBtn = document.getElementById('menu-toggle');
+    const siteNav = document.getElementById('site-nav');
+    if (menuBtn && siteNav) {
+      const menuGlyph = menuBtn.querySelector('[data-menu-glyph]');
+      const setOpen = (open) => {
+        siteNav.classList.toggle('is-open', open);
+        menuBtn.setAttribute('aria-expanded', String(open));
+        menuBtn.setAttribute('aria-label', open ? closeMenu : openMenu);
+        menuGlyph.textContent = open ? '✕' : '☰';
+      };
+      menuBtn.addEventListener('click', () => setOpen(!siteNav.classList.contains('is-open')));
+      siteNav.addEventListener('click', (e) => {
+        if (e.target instanceof HTMLElement && e.target.tagName === 'A') setOpen(false);
+      });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+    }
   })();
 </script>
