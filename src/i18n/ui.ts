@@ -15,6 +15,8 @@ export const ui = {
     'nav.otherLang': 'EN',
     'nav.themeToDark': 'Tema scuro',
     'nav.themeToLight': 'Tema chiaro',
+    'nav.openMenu': 'Apri il menu',
+    'nav.closeMenu': 'Chiudi il menu',
     'hero.prompt': 'lorenzo@ferrara:~$ cat profile.md',
     'hero.role': 'Laureato in Informatica · Studente di Cybersecurity',
     'hero.lede':
@@ -77,6 +79,8 @@ export const ui = {
     'nav.otherLang': 'IT',
     'nav.themeToDark': 'Dark theme',
     'nav.themeToLight': 'Light theme',
+    'nav.openMenu': 'Open menu',
+    'nav.closeMenu': 'Close menu',
     'hero.prompt': 'lorenzo@ferrara:~$ cat profile.md',
     'hero.role': 'BSc in Computer Science · Cybersecurity student',
     'hero.lede':
