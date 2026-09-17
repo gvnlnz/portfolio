@@ -201,3 +201,33 @@ footer a { font-size: 11px; }
 
 /* Below the fold: skip layout+paint until scrolled near. */
 #stack, #path, #contact { content-visibility: auto; contain-intrinsic-size: auto 800px; }
+
+/* ── mobile ── */
+.menu-toggle { display: none; }
+
+@media (max-width: 640px) {
+  /* explorer: the tree/editor layout doesn't fit narrow viewports —
+     force the grid view and hide the now-pointless toggle. */
+  .view-toggle-row { display: none !important; }
+  .explorer { display: none !important; }
+  .project-grid { display: grid !important; }
+
+  /* header: drop the wordmark, center the action buttons, collapse
+     section links into a dropdown opened from a top-right toggle. */
+  .hdr .nav {
+    display: grid; grid-template-columns: auto 1fr auto;
+    align-items: center; gap: var(--space-2);
+  }
+  .nav-brand-name { display: none; }
+  .hdr-tools { grid-column: 2; margin-left: 0; justify-content: center; }
+  .menu-toggle { display: inline-flex; grid-column: 3; }
+
+  .hdr nav[aria-label='Sections'] {
+    display: none; position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; align-items: flex-start; gap: 2px;
+    padding: 10px 16px 16px; background: var(--color-bg);
+    border-bottom: 1px solid var(--color-divider);
+  }
+  .hdr nav[aria-label='Sections'].is-open { display: flex; }
+  .hdr nav[aria-label='Sections'] a { padding: 8px 0; width: 100%; }
+}
