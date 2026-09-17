@@ -6,7 +6,7 @@ export const ui = {
   it: {
     'meta.title': 'Lorenzo Gaviani — Full stack developer, Ferrara',
     'meta.description':
-      'Laureato in Informatica e studente di Cybersecurity. Costruisco applicazioni full stack in Laravel, Node.js e Docker, e le metto alla prova dal lato della sicurezza.',
+      'Laureato in Informatica e studente di Cybersecurity. Costruisco applicazioni full stack in Laravel, Node.js e Docker, e le metto alla prova.',
     'nav.about': 'whoami',
     'nav.projects': 'progetti',
     'nav.stack': 'stack',
@@ -20,7 +20,7 @@ export const ui = {
     'hero.prompt': 'lorenzo@ferrara:~$ cat profile.md',
     'hero.role': 'Laureato in Informatica · Studente di Cybersecurity',
     'hero.lede':
-      'Costruisco applicazioni full stack e poi le metto alla prova dal lato della sicurezza. Attualmente sviluppo un e-commerce a micro servizi con integrazione LLM all\u2019Università di Ferrara.',
+      'Costruisco applicazioni full stack e poi le metto alla prova.',
     'hero.cta1': 'Guarda i progetti',
     'hero.cta2': 'Scrivimi',
     'hero.cv': 'Scarica il CV ↓',
@@ -84,7 +84,7 @@ export const ui = {
     'hero.prompt': 'lorenzo@ferrara:~$ cat profile.md',
     'hero.role': 'BSc in Computer Science · Cybersecurity student',
     'hero.lede':
-      'I build full-stack applications and then test them from the security side. Right now I am developing a microservice e-commerce with LLM integration at the University of Ferrara.',
+      'I build full-stack applications and then test them from the security side.',
     'hero.cta1': 'See the work',
     'hero.cta2': 'Get in touch',
     'hero.cv': 'Download CV ↓',

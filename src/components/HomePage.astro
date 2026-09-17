@@ -53,7 +53,7 @@ const paletteFiles = projects.map((p) => ({ key: p.key, file: p.file, tech: p.te
     <About locale={locale} />
 
     <section id="projects" class="sec">
-      <p class="kicker">02 — ls projects/</p>
+      <p class="kicker">02. ls projects/</p>
       <h2 class="sec-h">{t('projects.head')}</h2>
       <p class="dim" style="font-size:14px;margin:0 0 20px;max-width:52ch">{t('projects.sub')}</p>
       <ProjectExplorer client:visible projects={projects} strings={explorerStrings} />

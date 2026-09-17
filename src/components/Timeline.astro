@@ -7,7 +7,7 @@ const { locale } = Astro.props;
 const t = useTranslations(locale);
 ---
 <section id="path" class="sec">
-  <p class="kicker">04 — git log --path</p>
+  <p class="kicker">04. git log --path</p>
   <h2 class="sec-h" style="margin-bottom:34px">{t('path.head')}</h2>
   <ol class="tl">
     {timeline[locale].map((e) => (

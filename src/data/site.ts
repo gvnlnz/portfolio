@@ -4,7 +4,6 @@ export const site = {
   email: 'lorenzogaviani@gmail.com',
   github: 'https://github.com/gvnlnz',
   githubLabel: 'github.com/gvnlnz',
-  // TODO: replace with the real profile URL.
   linkedin: 'https://www.linkedin.com/in/lorenzo-gaviani-88839a286/',
   linkedinLabel: 'in/lorenzo-gaviani',
   cv: '/assets/CV_Gaviani_Lorenzo.pdf',
@@ -12,7 +11,7 @@ export const site = {
   photo: '/assets/lorenzo.jpg',
   city: 'Ferrara',
   timezone: 'Europe/Rome',
-  year: 2026
+  year: new Date().getFullYear()
 } as const;
 
 export const sectionIds = ['about', 'projects', 'stack', 'path', 'contact'] as const;

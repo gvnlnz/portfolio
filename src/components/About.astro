@@ -7,7 +7,7 @@ const { locale } = Astro.props;
 const t = useTranslations(locale);
 ---
 <section id="about" class="sec">
-  <p class="kicker">01 — whoami</p>
+  <p class="kicker">01. whoami</p>
   <h2 class="sec-h" style="max-width:22ch;line-height:1.08;margin-bottom:30px">{t('about.head')}</h2>
   <div class="cols" style="max-width:900px">
     {aboutParagraphs[locale].map((p) => <p class="prose" style="margin:0">{p}</p>)}

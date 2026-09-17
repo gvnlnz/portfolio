@@ -82,9 +82,9 @@ export default function ProjectExplorer({ projects, strings }: { projects: Proje
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
+      <div className="view-toggle-row" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
         <button
-          className="btn btn-secondary"
+          className="btn btn-secondary view-toggle"
           type="button"
           style={{ fontFamily: 'var(--font-mono)', fontSize: 11, padding: '6px 11px' }}
           onClick={() => setView((v) => (v === 'tree' ? 'grid' : 'tree'))}
@@ -93,24 +93,26 @@ export default function ProjectExplorer({ projects, strings }: { projects: Proje
         </button>
       </div>
 
-      {view === 'grid' ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 12 }}>
-          {projects.map((p) => (
-            <article key={p.key} className="card elev-sm" style={{ padding: 18, gap: 9 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
-                <span className="mono" style={{ fontSize: 11, color: 'var(--color-accent)' }}>{p.file}</span>
-                <span className="mono dim-2" style={{ fontSize: 10.5 }}>{p.year}</span>
-              </div>
-              <h3 className="card-title">{p.title}</h3>
-              <p className="card-body" style={{ lineHeight: 1.62 }}>{p.body}</p>
-              <ul className="tagrow" style={{ margin: 0 }}>
-                {p.tags.map((t) => <li key={t} className="tag tag-neutral">{t}</li>)}
-              </ul>
-            </article>
-          ))}
-        </div>
-      ) : (
-        <div className="explorer">
+      <div
+        className="project-grid"
+        style={{ display: view === 'grid' ? 'grid' : 'none', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 12 }}
+      >
+        {projects.map((p) => (
+          <article key={p.key} className="card elev-sm" style={{ padding: 18, gap: 9 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+              <span className="mono" style={{ fontSize: 11, color: 'var(--color-accent)' }}>{p.file}</span>
+              <span className="mono dim-2" style={{ fontSize: 10.5 }}>{p.year}</span>
+            </div>
+            <h3 className="card-title">{p.title}</h3>
+            <p className="card-body" style={{ lineHeight: 1.62 }}>{p.body}</p>
+            <ul className="tagrow" style={{ margin: 0 }}>
+              {p.tags.map((t) => <li key={t} className="tag tag-neutral">{t}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+
+      <div className="explorer" style={{ display: view === 'grid' ? 'none' : 'flex' }}>
           <aside>
             <p className="explorer-label">{strings.explorer}</p>
             <div className="tree">
@@ -178,7 +180,6 @@ export default function ProjectExplorer({ projects, strings }: { projects: Proje
             </div>
           </div>
         </div>
-      )}
     </>
   );
 }
